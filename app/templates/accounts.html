@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>Accounts</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Balance</th>
+        <th>Notes</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody
+        hx-target="closest tr"
+        hx-swap="outerHTML"
+    >
+    <tr>
+        <td><input type="text" name="name" id="name"></td>
+        <td><input type="number" name="balance" id="balance"></td>
+        <td><textarea name="notes" id="notes"></textarea></td>
+        <td><button
+            hx-post="/accounts"
+            hx-target="body"
+            hx-include="#name, #balance, #notes"
+        >Add</button></td>
+    </tr>
+    {% for account in accounts %}
+        {% include 'account_single.html' %}
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+// From https://www.therogerlab.com/sandbox/pages/how-to-reorder-table-rows-in-javascript
+var row;
+function start(){
+  row = event.target;
+}
+function dragover(){
+  var e = event;
+  e.preventDefault();
+
+  let children= Array.from(e.target.parentNode.parentNode.children);
+  if(children.indexOf(e.target.parentNode)>children.indexOf(row))
+    e.target.parentNode.after(row);
+  else
+    e.target.parentNode.before(row);
+}
+
+function drop() {
+    let order = Array.from(document.querySelectorAll('.account-row')).map(function (el) {
+        return el.dataset.accountId;
+    });
+    console.log(order);
+    fetch('/accounts/reorder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    });
+};
+</script>
+
+{% endblock %}

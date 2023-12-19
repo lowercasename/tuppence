@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>Overview</h2>
+
+<p>You have <strong>{{ account_balance | price }}</strong> across all your accounts.</p>
+
+<p><strong>{{ pot_balance | price }}</strong> is distributed among your pots.</p>
+
+{% endblock %}
+

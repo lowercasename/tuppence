@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<nav id="month-nav">
+    <ul>
+        <li><i class="fa-solid fa-angle-left"></i> <a hx-get="{{ previous_url }}" hx-target="body" hx-push-url="true">{{ previous_month }}</a></li>
+        <li>{{ current_month }}</li>
+        <li><a hx-get="{{ next_url }}" hx-target="body" hx-push-url="true">{{ next_month }}</a> <i class="fa-solid fa-angle-right"></i></li>
+    </ul>
+</nav>
+
+<h2>Transactions</h2>
+
+{% if accounts|length == 0 %}
+    <p>You need an account to create transactions. <a href="/accounts">Add an account</a>.</p>
+{% else %}
+<table>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Account</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Categories</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody
+        hx-target="closest tr"
+        hx-swap="outerHTML"
+    >
+    {% include 'transaction_creator.html' %}
+    {% for transaction in transactions %}
+        {% include 'transaction_single.html' %} 
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

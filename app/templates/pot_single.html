@@ -1,0 +1,69 @@
+<tr draggable='true' ondragstart='start()' ondragover='dragover()' ondragend='drop()' class="pot-row" data-pot-id="{{ pot.id }}">
+    <td>{{ pot.name }}</td>
+    <td>{{ pot.balance | price }}</td>
+    <td>
+    <div>
+        <strong>{{ pot.goal_type_label }}</strong>
+    </div>
+    <div>
+        {% if pot.goal_type == 'goal-amount' or pot.goal_type == 'goal-date' or pot.goal_type == 'recurring' %}
+            <span>
+                {{ pot.goal_amount | price }}
+                {% if pot.goal_type == 'goal-date' %}
+                    <span> by {{ pot.goal_date.strftime('%B %Y') }}</span>
+                {% endif %}
+                {% if pot.goal_type == 'recurring' %}
+                    <span> per month, due on the {{ pot.recurring_day }}th</span>
+                {% endif %}
+            </span>
+            <div>Remaining: {{ pot.goal_remaining | price }} ({{ pot.percent_complete }}% complete)</div>
+        {% endif %}
+    </div>
+    {% if pot.goal_type == 'goal-date' %}
+        <div>
+            <progress
+                value="{{ pot.percent_complete }}"
+                max="100"
+                title="{{ pot.percent_complete }}%"
+            ></progress>
+        </div>
+        <div>
+            <span>Months remaining: {{ pot.months_remaining }}</span> <br>
+            <span>Recommended monthly assigment: {{ pot.recommended_assign_amount | price }}</span>
+        </div>
+    {% endif %}
+    {% if pot.goal_type == 'recurring' or pot.goal_type == 'goal-amount' %}
+        <div>
+            <progress
+                value="{{ pot.percent_complete }}"
+                max="100"
+                title="{{ pot.percent_complete }}%"
+            ></progress>
+        </div>
+    {% endif %}
+    </td>
+    <td>
+        {% if pot.name != "Unassigned" %}
+        <button
+            hx-get="/pots/{{ pot.id }}/editor"
+            hx-trigger="edit"
+            @click="
+                if (document.querySelector('.editing')) {
+                    if (confirm('You are already editing a row. Do you want to cancel that edit and continue?') === false) {
+                        return;
+                    }
+                    htmx.trigger('.editing', 'cancel');
+                }
+                htmx.trigger($el, 'edit');
+            "
+        >
+            Edit
+        </button>
+        <button
+            hx-delete="/pots/{{ pot.id }}"
+            hx-confirm="Are you sure you want to delete this pot?"
+            hx-target="body"
+        >Delete</button>
+        {% endif %}
+    </td>
+</tr>

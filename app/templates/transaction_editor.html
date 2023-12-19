@@ -1,0 +1,60 @@
+<tr hx-trigger='cancel' class='editing' hx-get="/transactions/{{transaction.id}}">
+    <td><input type="date" name="created" id="created"
+        value="{{ transaction.created.strftime('%Y-%m-%d') }}"
+    ></td>
+    <td>
+        <select name="account_id" id="account_id">
+            {% for account in accounts %}
+                <option
+                    value="{{ account.id }}"
+                    {% if account.id == transaction.account_id %}selected{% endif %}
+                >{{ account.name }}</option>
+            {% endfor %}
+        </select>
+    </td>
+    <td><input type="number" name="amount" id="amount" value="{{ transaction.amount / 100 }}"></td>
+    <td><input type="text" name="description" id="description" value="{{ transaction.description }}"></td>
+    <td>
+        <div x-data="{ categories: [{% for c in transaction.category_names %}'{{c}}',{% endfor %}], newCategory: '' }" class="category-selector">
+            <input
+                type="text"
+                x-model="newCategory"
+                @keydown.enter.prevent="
+                    if (categories.indexOf(newCategory) === -1) {
+                        categories.push(newCategory);
+                    }
+                    newCategory = '';
+                "
+                name="new_category"
+                hx-get="/category/search"
+                hx-trigger="keyup changed delay:500ms"
+                hx-target="next .category-selector__suggestions"
+                placeholder="Add a category"
+            >
+            <ul class="category-selector__suggestions"></ul>
+            <ul class="category-selector__selected" x-show="categories.length > 0">
+                <template x-for="(category, index) in categories">
+                    <li>
+                        <input type="hidden" name="category_names" x-bind:value="category">
+                        <span x-text="category"></span>
+                        <button type="button" @click="categories.splice(index, 1)"><i class="fa-solid fa-times"></i></button>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <div class="transaction-editor__actions">
+            <button hx-get="/transactions/{{transaction.id}}">
+                Cancel
+            </button>
+            <button
+                hx-put="/transactions/{{transaction.id}}"
+                hx-include="closest tr"
+                hx-target="body"
+            >
+                Save
+            </button>
+        </div>
+    </td>
+</tr>

@@ -1,0 +1,6 @@
+<ul class="transaction__categories">
+    <li x-for="(category, index) in categories" :key="index">
+        <span x-text="tag"></span>
+        <button type="button" x-on:click="removeCategory(index)">Remove</button>
+    </li>
+</ul>

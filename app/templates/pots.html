@@ -1,0 +1,118 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>Pots</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Balance</th>
+        <th>Goal</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody hx-target="closest tr" hx-swap="outerHTML" x-data>
+    <tr>
+        <td><input type="text" name="name" id="name"></td>
+        <td><input type="number" name="balance" id="balance"></td>
+        <td x-data="{ goal_type: 'none' }">
+            <select
+                name="goal_type"
+                id="goal_type"
+                @change="goal_type = $event.target.value"
+            >
+                <option value="none" selected>Simple pot</option>
+                <option value="recurring">Recurring expense</option>
+                <option value="goal-amount">Save a certain amount</option>
+                <option value="goal-date">Save a certain amount by a certain date</option>
+            </select>
+            <input type="number" name="goal_amount" id="goal_amount" x-show="['goal-amount', 'goal-date', 'recurring'].includes(goal_type)" style="display: none">
+            <input type="date" name="goal_date" id="goal_date" x-show="goal_type === 'goal-date'" style="display: none">
+        <select
+            name="recurring_day"
+            id="recurring_day"
+            x-show="goal_type === 'recurring'"
+            style="display: none"
+        >
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+            <option value="6">6th</option>
+            <option value="7">7th</option>
+            <option value="8">8th</option>
+            <option value="9">9th</option>
+            <option value="10">10th</option>
+            <option value="11">11th</option>
+            <option value="12">12th</option>
+            <option value="13">13th</option>
+            <option value="14">14th</option>
+            <option value="15">15th</option>
+            <option value="16">16th</option>
+            <option value="17">17th</option>
+            <option value="18">18th</option>
+            <option value="19">19th</option>
+            <option value="20">20th</option>
+            <option value="21">21st</option>
+            <option value="22">22nd</option>
+            <option value="23">23rd</option>
+            <option value="24">24th</option>
+            <option value="25">25th</option>
+            <option value="26">26th</option>
+            <option value="27">27th</option>
+            <option value="28">28th</option>
+            <option value="29">29th</option>
+            <option value="30">30th</option>
+            <option value="31">31st</option>
+        </select>
+        <td><button
+            hx-post="/pots"
+            hx-target="body"
+            hx-include="#name, #balance, #goal_type, #goal_amount, #goal_date, #recurring_day"
+        >Add</button></td>
+    </tr>
+    {% for pot in pots %}
+       {% include 'pot_single.html' %} 
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+// From https://www.therogerlab.com/sandbox/pages/how-to-reorder-table-rows-in-javascript
+var row;
+function start(){
+  row = event.target;
+}
+function dragover(){
+  var e = event;
+  e.preventDefault();
+
+  let children= Array.from(e.target.parentNode.parentNode.children);
+  if(children.indexOf(e.target.parentNode)>children.indexOf(row))
+    e.target.parentNode.after(row);
+  else
+    e.target.parentNode.before(row);
+}
+
+function drop() {
+    // Get the order of the .pot-row elements
+    let order = Array.from(document.querySelectorAll('.pot-row')).map(function (el) {
+        return el.dataset.potId;
+    });
+    console.log(order);
+    fetch('/pots/reorder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    });
+};
+</script>
+
+
+
+{% endblock %}

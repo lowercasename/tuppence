@@ -1,0 +1,228 @@
+:root {
+    --grey-100: #f8f9fa;
+    --grey-200: #e9ecef;
+    --grey-300: #dee2e6;
+    --grey-400: #ced4da;
+    --grey-500: #adb5bd;
+    --grey-600: #6c757d;
+    --grey-700: #495057;
+    --grey-800: #343a40;
+    --grey-900: #212529;
+
+    --blue-300: #bee0ff;
+    --blue-500: #007bff;
+    --blue-700: #005cbf;
+    --blue-900: #002d5a;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+a {
+    color: var(--blue-500);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:hover {
+    opacity: 0.6;
+}
+
+nav#month-nav ul,
+nav#header-nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+nav#month-nav li,
+nav#header-nav li {
+    display: inline;
+}
+
+button {
+    border: 1px solid var(--blue-500);
+    background: white;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+button:hover {
+    background-color: var(--blue-500);
+    color: white;
+}
+
+input, select, textarea {
+    border: 1px solid var(--grey-500);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background-color: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--blue-500);
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin: 0.25rem 0;
+}
+
+header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--grey-300);
+}
+
+header h1 {
+    position: relative;
+}
+
+img.header__icon {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+    position: relative;
+    top: 0.35rem;
+}
+
+body > main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+main > table {
+    width: 100%;
+    border-collapse: collapse;
+    user-select: none;
+}
+
+main > table thead th {
+    text-align: left;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--grey-400);
+}
+
+main > table tbody td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--grey-200);
+    vertical-align: top;
+}
+
+main > table p {
+    margin: 0;
+}
+
+.transaction-editor__amount {
+    display: flex;
+    gap: 5px;
+}
+
+.transaction-editor__amount button {
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    line-height: 0;
+}
+
+.transaction-editor__actions,
+.account-editor__actions {
+    display: flex;
+    gap: 5px;
+}
+
+.text--small {
+    font-size: 0.85rem;
+}
+
+.category-selector {
+  position: relative;
+}
+
+.category-selector {
+  position: relative;
+}
+
+.category-selector__suggestions {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: calc(100% - 2px);
+    background: #fefefe;
+    left: 0;
+    border-top: 1px solid var(--grey-300);
+    border-bottom: 1px solid var(--blue-500);
+    border-left: 1px solid var(--blue-500);
+    border-right: 1px solid var(--blue-500);
+    border-radius: 0 0 0.25rem 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    top: calc(1rem + 7px);
+    font-size: 0.9rem;
+    color: var(--grey-700);
+}
+
+.category-selector__suggestions li {
+    padding: 0.5rem;
+}
+
+.category-selector__suggestions li:hover {
+    background: var(--grey-200);
+}
+
+.category-selector__selected {
+    list-style-type: none;
+    margin: 0.5rem 0 0 0;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.transaction__categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-selector__selected li, .transaction__category {
+    background: var(--grey-200);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    white-space: nowrap;
+    max-width: 12rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.category-selector__selected li span,
+.transaction__category span {
+    text-overflow: ellipsis;
+    flex: 1;
+    margin-right: 0.25rem;
+    overflow: hidden;
+}
+
+.category-selector__selected li button,
+.transaction__category button {
+    border: none;
+    font-size: 0.6rem;
+    width: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

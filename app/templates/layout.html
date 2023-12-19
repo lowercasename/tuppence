@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <title>Tuppence</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome.min.css') }}"/>
+    <link rel="icon" href="{{ url_for('static', filename='coins.png') }}"/>
+</head>
+<body>
+<main>
+    <header>
+        <h1>
+            <img class="header__icon" src="{{ url_for('static', filename='coins.png') }}"/>
+            Tuppence
+        </h1>
+        <nav id="header-nav">
+            <ul>
+                {% if is_authenticated() %}
+                    <li><a href="/">Overview</a></li>
+                    <li><a href="/accounts">Accounts</a></li>
+                    <li><a href="/transactions">Transactions</a></li>
+                    <li><a href="/pots">Pots</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Create account</a></li>
+                {% endif %}
+            </ul>
+    </header>
+
+    {% block content %}{% endblock %}
+
+</main>
+</body>
+</html>

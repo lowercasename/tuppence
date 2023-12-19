@@ -1,0 +1,74 @@
+<tr x-data="{ isTransfer: false, sign: '-' }">
+    <td>
+        <input type="date" name="created" id="created" value="{{ current_date }}">
+    </td>
+    <td>
+        <div class="transaction-editor__account">
+            <label for="is_transfer" style="font-weight: normal;">
+                <input type="checkbox" name="is_transfer" id="is_transfer" x-on:click="isTransfer = !isTransfer" x-model="isTransfer">
+                Transfer
+            </label>
+            <select name="account_id" id="account_id" x-show="!isTransfer">
+                {% for account in accounts %}
+                    <option value="{{ account.id }}">{{ account.name }}</option>
+                {% endfor %}
+            </select>
+            <div x-show="isTransfer" style="display: none;">
+                <label for="transfer_source_id">From</label>
+                <select name="transfer_source_id" id="transfer_source_id">
+                    {% for account in accounts %}
+                        <option value="{{ account.id }}">{{ account.name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="transfer_destination_id">To</label>
+                <select name="transfer_destination_id" id="transfer_destination_id">
+                    {% for account in accounts %}
+                        <option value="{{ account.id }}">{{ account.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </td>
+    <td>
+        <div class="transaction-editor__amount">
+            <button type="button" x-on:click="!isTransfer && (sign = (sign == '-' ? '+' : '-'))" x-text="isTransfer ? '+' : sign" x-bind:disabled="isTransfer"></button>
+            <input type="hidden" name="sign" id="sign" x-model="isTransfer ? '+' : sign">
+            <input type="number" name="amount" id="amount">
+        </div>
+    </td>
+    <td><input type="text" name="description" id="description"></td>
+    <td>
+        <div x-data="{ categories: [], newCategory: '' }" class="category-selector">
+            <input
+                type="text"
+                x-model="newCategory"
+                @keydown.enter.prevent="
+                    if (categories.indexOf(newCategory) === -1) {
+                        categories.push(newCategory);
+                    }
+                    newCategory = '';
+                "
+                name="new_category"
+                hx-get="/category/search"
+                hx-trigger="keyup changed delay:350ms"
+                hx-target="next .category-selector__suggestions"
+                placeholder="Add a category"
+            >
+            <ul class="category-selector__suggestions" style="display: none;"></ul>
+            <ul class="category-selector__selected" x-show="categories.length > 0">
+                <template x-for="(category, index) in categories">
+                    <li>
+                        <input type="hidden" name="category_names" x-bind:value="category">
+                        <span x-text="category"></span>
+                        <button type="button" @click="categories.splice(index, 1)"><i class="fa-solid fa-times"></i></button>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </td>
+    <td><button
+        hx-post="/transactions"
+        hx-target="body"
+        hx-include="#created, #account_id, #pot_id, #amount, #description, #sign, #is_transfer, #transfer_source_id, #transfer_destination_id, input[name='category_names']"
+    >Add</button></td>
+</tr>

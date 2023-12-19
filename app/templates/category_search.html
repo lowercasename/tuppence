@@ -1,0 +1,14 @@
+<ul class="category-selector__suggestions" x-show="newCategory.length > 0">
+    {% for category in categories %}
+        <li
+            x-on:click="
+                if (categories.indexOf('{{category}}') === -1) {
+                    categories.push('{{category}}');
+                }
+                newCategory = '';
+            "
+        >
+            {{ category }}
+        </li>
+    {% endfor %}
+</ul>

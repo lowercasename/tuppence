@@ -1,0 +1,30 @@
+<div x-data="{ categories: [], newCategory: '' }">
+    <input
+        type="text"
+        id="categories"
+        x-model="newCategory"
+        @keydown.enter.prevent="saveNewCategory"
+        placeholder="Add a category"
+    >
+    <ul hx-get="/transaction/{{ transaction.id }}/categories">
+        <li x-for="(category, index) in categories" :key="index">
+            <span x-text="category"></span>
+            <button type="button" x-on:click="removeCategory(index)">Remove</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function saveNewCategory() {
+        if (this.newCategory.trim() !== '') {
+            this.categories.push(this.newCategory.trim());
+            this.newCategory = ''; // Clear the input field
+            this.$wire.get('/transaction/{{ transaction.id }}/categories');
+        }
+    }
+
+    function removeCategory(index) {
+        this.categories.splice(index, 1);
+        this.$wire.get('/transaction/{{ transaction.id }}/categories');
+    }
+</script>
