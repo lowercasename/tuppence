@@ -1,3 +1,4 @@
 .env
 __pycache__/
 tuppence.db
+.DS_Store
