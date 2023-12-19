@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 from lib.strings import currency_database_to_string
 from lib.db import Database
+from lib.supabase import supabase
 
 load_dotenv()
 

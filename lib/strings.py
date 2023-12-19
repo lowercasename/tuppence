@@ -11,3 +11,6 @@ def currency_database_to_string(value):
 
 def generate_login_token():
     return secrets.token_hex(32)
+
+def generate_password():
+    return secrets.token_hex(32)

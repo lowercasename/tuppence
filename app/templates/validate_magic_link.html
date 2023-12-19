@@ -1,0 +1,15 @@
+
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<script>
+// Replace # in URL with ? and reload the page
+if (window.location.href.indexOf('#') > -1) {
+    window.location.replace(window.location.href.replace('#', '?'));
+} else {
+    window.location.replace(window.location.href + '?');
+}
+</script>
+
+{% endblock %}
