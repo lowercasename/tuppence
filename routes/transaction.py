@@ -43,13 +43,13 @@ def transaction_delete(id):
 @app.route('/transactions', methods=['POST'])
 @with_auth
 def transaction_create():
-    account_id, amount, sign, description, transfer_source_id, transfer_destination_id = validate_form_fields(
-        ['account_id', 'amount', 'sign', 'description', 'transfer_source_id', 'transfer_destination_id']).values()
-    amount = currency_string_to_database(amount)
-    if sign == '-':
-        amount = -amount
-    else:
-        amount = abs(amount)
+    account_id, amount, description, transfer_source_id, transfer_destination_id = validate_form_fields(
+        ['account_id', 'amount', 'description', 'transfer_source_id', 'transfer_destination_id']).values()
+    # We expect to receive the amount as a float string with the sign already applied
+    try:
+        amount = currency_string_to_database(amount)
+    except ValueError:
+        return 'Invalid amount', 400
     is_transfer = bool(request.form.get('is_transfer', False))
     user_id = session['user_id']
     category_names = [c.strip() for c in request.form.getlist('category_names')]

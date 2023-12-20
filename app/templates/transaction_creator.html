@@ -1,4 +1,9 @@
-<tr x-data="{ isTransfer: false, sign: '-' }">
+<tr x-data="{
+    isTransfer: false,
+    sign: '-',
+    amount: '',
+    calculatedAmount: 0,
+}">
     <td>
         <input type="date" name="created" id="created" value="{{ current_date }}">
     </td>
@@ -31,9 +36,26 @@
     </td>
     <td>
         <div class="transaction-editor__amount">
-            <button type="button" x-on:click="!isTransfer && (sign = (sign == '-' ? '+' : '-'))" x-text="isTransfer ? '+' : sign" x-bind:disabled="isTransfer"></button>
-            <input type="hidden" name="sign" id="sign" x-model="isTransfer ? '+' : sign">
-            <input type="number" name="amount" id="amount">
+            <button
+                type="button"
+                x-on:click="!isTransfer && (sign = (sign == '-' ? '+' : '-'))"
+                x-html="isTransfer ? '<i class=\'fa-solid fa-plus\'></i>' : (sign == '-' ? '<i class=\'fa-solid fa-minus\'></i>' : '<i class=\'fa-solid fa-plus\'></i>')"
+                x-bind:disabled="isTransfer"
+            ></button>
+            <div class="transaction-editor__amount__input">
+                <input
+                    type="text"
+                    autofocus
+                    x-model="amount"
+                    x-on:input="calculateAmount"
+                >
+                <span
+                    class="transaction-editor__amount__calculated"
+                    x-text="(sign === '+' ? '' : '-') + '£' + calculatedAmount"
+                    x-show="calculatedAmount != amount"
+                ></span>
+                <input type="hidden" id="amount" name="amount" x-bind:value="calculatedAmount * (sign === '+' ? 1 : -1)">
+            </div>
         </div>
     </td>
     <td><input type="text" name="description" id="description"></td>
@@ -48,6 +70,7 @@
                     }
                     newCategory = '';
                 "
+                @keydown.escape="newCategory = ''"
                 name="new_category"
                 hx-get="/category/search"
                 hx-trigger="keyup changed delay:350ms"
@@ -69,6 +92,23 @@
     <td><button
         hx-post="/transactions"
         hx-target="body"
-        hx-include="#created, #account_id, #pot_id, #amount, #description, #sign, #is_transfer, #transfer_source_id, #transfer_destination_id, input[name='category_names']"
+        hx-include="#created, #account_id, #pot_id, #amount, #description, #is_transfer, #transfer_source_id, #transfer_destination_id, input[name='category_names']"
     >Add</button></td>
 </tr>
+
+<script type="module">
+import exprEval from 'https://cdn.jsdelivr.net/npm/expr-eval@2.0.2/+esm';
+
+const Parser = new exprEval.Parser();
+
+window.calculateAmount = function() {
+    try {
+        // Attempt to parse the 'amount' value as a mathematical expression
+        // rounding to 2 decimal places
+        this.calculatedAmount = (Math.round(Parser.evaluate(this.amount) * 100) / 100).toFixed(2);
+    } catch (e) {
+        // If it fails, just use the raw value
+        this.calculatedAmount = this.amount;
+    }
+}
+</script>
