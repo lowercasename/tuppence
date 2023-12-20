@@ -107,6 +107,16 @@ class Database:
                 UPDATE accounts SET balance = balance - OLD.amount WHERE id = OLD.account_id;
                 UPDATE pots SET balance = balance - OLD.amount WHERE id = OLD.pot_id;
             END;""")
+        # Create a trigger to update the referenced account and pot balances when a pot is assigned to a transaction
+        self.cur.execute("""
+            CREATE TRIGGER IF NOT EXISTS update_account_balance_assign
+            AFTER UPDATE OF pot_id ON transactions
+            BEGIN
+                UPDATE accounts SET balance = balance - OLD.amount WHERE id = OLD.account_id;
+                UPDATE pots SET balance = balance - OLD.amount WHERE id = OLD.pot_id;
+                UPDATE accounts SET balance = balance + NEW.amount WHERE id = NEW.account_id;
+                UPDATE pots SET balance = balance + NEW.amount WHERE id = NEW.pot_id;
+            END;""")
         # Create a default 'Unassigned' pot
         self.cur.execute("""
             INSERT OR IGNORE INTO pots (name, type) VALUES ('Unassigned', 'internal');
