@@ -28,7 +28,6 @@ def inject_month_year():
         month = str(now.month)
         year = str(now.year)
     current_datetime = datetime.strptime(f'{year}-{month}', '%Y-%m')
-    print(current_datetime)
     current_label = current_datetime.strftime("%B %Y")
     next_month = current_datetime + relativedelta.relativedelta(months=1)
     previous_month = current_datetime - relativedelta.relativedelta(months=1)
