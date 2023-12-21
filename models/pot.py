@@ -51,7 +51,7 @@ class Pot:
         if self.goal_type == 'goal-date':
             first_of_this_month = datetime.today().replace(day=1)
             r = relativedelta(self.goal_date, first_of_this_month)
-            months = r.years * 12 + r.months
+            months = r.years * 12 + r.months + 1
             if months > 0:
                 self.recommended_assign_amount = round(
                     self.goal_remaining / months, 2)
