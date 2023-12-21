@@ -2,6 +2,7 @@ from datetime import datetime
 from app import app
 from flask import render_template, request, redirect, session
 from lib.auth import with_auth
+from lib.date import validate_month, validate_year
 from lib.server import validate_form_fields
 from models.account import Account
 from models.category import Category
@@ -11,17 +12,10 @@ from lib.strings import currency_string_to_database
 @app.route('/transactions')
 @with_auth
 def transaction_list():
-    month = request.args.get('m')
-    year = request.args.get('y')
+    month = validate_month(request.args.get('m'))
+    year = validate_year(request.args.get('y'))
     a = Account.get_all()
-    if month is not None and year is not None:
-        try:
-            t = Transaction.get_all(int(month), int(year))
-            return render_template('transactions.html', transactions=t, accounts=a)
-        except ValueError:
-            pass
-    now = datetime.now()
-    t = Transaction.get_all(month=now.month, year=now.year)
+    t = Transaction.get_all(month, year)
     return render_template('transactions.html', transactions=t, accounts=a)
 
 # Returns a table row for a single transaction

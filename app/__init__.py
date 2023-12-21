@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dateutil import relativedelta
 from dotenv import load_dotenv
 import os
+from lib.date import validate_month, validate_year
 from lib.strings import currency_database_to_string
 from lib.db import Database
 
@@ -21,30 +22,29 @@ def make_session_permanent():
 
 @app.context_processor
 def inject_month_year():
-    month = request.args.get('m')
-    year = request.args.get('y')
-    if month is None or year is None:
-        now = datetime.now()
-        month = str(now.month)
-        year = str(now.year)
+    month = validate_month(request.args.get('m'))
+    year = validate_year(request.args.get('y'))
     current_datetime = datetime.strptime(f'{year}-{month}', '%Y-%m')
     current_label = current_datetime.strftime("%B %Y")
     next_month = current_datetime + relativedelta.relativedelta(months=1)
     previous_month = current_datetime - relativedelta.relativedelta(months=1)
     next_label = next_month.strftime("%B %Y")
     previous_label = previous_month.strftime("%B %Y")
-    next_url = f'/transactions?m={next_month.month}&y={next_month.year}'
-    previous_url = f'/transactions?m={previous_month.month}&y={previous_month.year}'
+    path = request.path
+    next_url = f'{path}?m={next_month.month}&y={next_month.year}'
+    previous_url = f'{path}?m={previous_month.month}&y={previous_month.year}'
 
     # Other fields
     current_date = datetime.now()
+    current_page = request.path
     return {
         'current_month': current_label,
         'next_month': next_label,
         'previous_month': previous_label,
         'next_url': next_url,
         'previous_url': previous_url,
-        'current_date': current_date.strftime("%Y-%m-%d")
+        'current_date': current_date.strftime("%Y-%m-%d"),
+        'current_page': current_page
     }
 
 @app.template_filter('price')
