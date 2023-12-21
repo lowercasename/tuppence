@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome.min.css') }}"/>
     <link rel="icon" href="{{ url_for('static', filename='coins.png') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<main>
     <header>
         <h1>
             <img class="header__icon" src="{{ url_for('static', filename='coins.png') }}"/>
@@ -18,20 +18,22 @@
         <nav id="header-nav">
             <ul>
                 {% if is_authenticated() %}
-                    <li><a href="/">Overview</a></li>
-                    <li><a href="/accounts">Accounts</a></li>
-                    <li><a href="/transactions">Transactions</a></li>
-                    <li><a href="/pots">Pots</a></li>
+                    <li><a href="/" {% if current_page == '/' %}class="current"{% endif %}>Overview</a></li>
+                    <li><a href="/accounts" {% if current_page == '/accounts' %}class="current"{% endif %}>Accounts</a></li>
+                    <li><a href="/transactions" {% if current_page == '/transactions' %}class="current"{% endif %}>Transactions</a></li>
+                    <li><a href="/pots" {% if current_page == '/pots' %}class="current"{% endif %}>Pots</a></li>
                     <li><a href="/logout">Logout</a></li>
                 {% else %}
                     <li><a href="/login">Login</a></li>
                     <li><a href="/register">Create account</a></li>
                 {% endif %}
             </ul>
+        </nav>
     </header>
+    <main>
 
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
 
-</main>
+    </main>
 </body>
 </html>

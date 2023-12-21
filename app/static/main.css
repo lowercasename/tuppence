@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700;1,9..40,400;1,9..40,700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700&family=Neuton:ital@0;1&display=swap');
+
 :root {
     --grey-100: #f8f9fa;
     --grey-200: #e9ecef;
@@ -20,7 +22,8 @@
 }
 
 body {
-    font-family: sans-serif;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
 }
 
 a {
@@ -31,6 +34,15 @@ a {
 
 a:hover {
     opacity: 0.6;
+}
+
+nav#month-nav {
+    background-color: var(--grey-100);
+    border: 1px solid var(--grey-200);
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
 }
 
 nav#month-nav ul,
@@ -46,6 +58,11 @@ nav#header-nav ul {
 nav#month-nav li,
 nav#header-nav li {
     display: inline;
+}
+
+nav#header-nav a.current {
+    color: #000;
+    text-decoration: none;
 }
 
 button {
@@ -81,27 +98,55 @@ label {
     margin: 0.25rem 0;
 }
 
-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid var(--grey-300);
+body > header {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--grey-300);
 }
 
-header h1 {
+body > header h1 {
     position: relative;
+    margin: 0 0 1rem 0;
+    font-size: 1.75rem;
 }
 
 img.header__icon {
-    width: 2rem;
-    height: 2rem;
-    margin-right: 0.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-right: 0.25rem;
     position: relative;
     top: 0.35rem;
 }
 
+@media screen and (min-width: 768px) {
+    body > header {
+        flex-wrap: nowrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    body > header h1 {
+        margin: 0;
+    }
+}
+
+
+
 body > main {
     margin: 0 auto;
-    padding: 1rem;
+    padding: 0.5rem;
+}
+
+body > main h2 {
+    margin: 0 0 1rem 0;
 }
 
 main > table {
@@ -137,6 +182,22 @@ main > table input[type="number"]
 main > table select,
 main > table textarea {
     width: 100%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.grid > * {
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(auto-fit,minmax(0%,1fr));
+    }
 }
 
 .transaction-editor__amount {
