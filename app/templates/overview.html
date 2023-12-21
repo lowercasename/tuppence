@@ -2,11 +2,81 @@
 
 {% block content %}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <h2>Overview</h2>
 
 <p>You have <strong>{{ account_balance | price }}</strong> across all your accounts.</p>
 
 <p><strong>{{ pot_balance | price }}</strong> is distributed among your pots.</p>
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<div style="max-width: 400px;">
+  <canvas id="categoriesChart"></canvas>
+</div>
+<script>
+    const ctx = document.getElementById('myChart');
+
+    const data = {{ balance_chart | safe }}
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data[0].balances.map((_, i) => i),
+            datasets: data.map(a => ({
+                label: a.name,
+                data: a.balances.map(b => b / 100),
+            }))
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return value.toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                    }
+                },
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const categoriesCtx = document.getElementById('categoriesChart');
+    const categoriesData = {{ categories_chart | safe }}
+
+    new Chart(categoriesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: categoriesData.map(a => a.name),
+            datasets: [{
+                data: categoriesData.map(a => Math.abs(a.amount / 100)),
+            }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.parsed.toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 {% endblock %}
 

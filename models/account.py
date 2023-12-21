@@ -10,7 +10,7 @@ class Account:
         self.created = datetime.strptime(created, '%Y-%m-%d %H:%M:%S') if created is not None else None
         self.user_id = user_id
         self.name = name
-        self.balance = balance
+        self.balance = int(balance) if balance is not None else 0
         self.notes = notes if notes is not None else ""
         self.notes_html = commonmark.commonmark(notes) if notes is not None else ""
         self.sort_order = sort_order
@@ -35,7 +35,7 @@ class Account:
     def update_sort_order(self, sort_order):
         self.sort_order = sort_order
         self.repository.update_sort_order(self.id, sort_order)
-    
+
     @classmethod
     def get_by_id(self, id):
         repository = SQLiteAccountRepository(Database("tuppence.db"))

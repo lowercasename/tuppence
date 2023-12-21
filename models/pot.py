@@ -15,7 +15,7 @@ class Pot:
         self.sort_order = sort_order
         self.name = name
         # Balances are stored in cents as integers
-        self.balance = balance
+        self.balance = int(balance) if balance is not None else 0
         # Boolean
         self.auto_assign = auto_assign
         # If auto_assign is true, this is the amount to assign each month

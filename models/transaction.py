@@ -71,7 +71,7 @@ class Transaction:
         return repository.get_by_id(id)
     
     @classmethod
-    def get_all(self, month=None, year=None):
+    def get_all(self, month: int, year: int):
         repository = SQLiteTransactionRepository(Database("tuppence.db"))
         return repository.get_all(month, year)
 

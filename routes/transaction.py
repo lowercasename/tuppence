@@ -25,7 +25,6 @@ def transaction_list():
     return render_template('transactions.html', transactions=t, accounts=a)
 
 # Returns a table row for a single transaction
-# TODO: Is this used?
 @app.route('/transactions/<id>')
 @with_auth
 def transaction_get(id):
@@ -36,8 +35,11 @@ def transaction_get(id):
 
 @app.route('/transactions/<id>', methods=['DELETE'])
 @with_auth
-def transaction_delete(id):
-    Transaction.get_by_id(id).delete()
+def transaction_delete(id: int):
+    t = Transaction.get_by_id(id)
+    if t is None:
+        return 404
+    t.delete()
     return redirect('/transactions', code=303)
 
 @app.route('/transactions', methods=['POST'])
@@ -80,6 +82,8 @@ def transaction_update(id):
         ['account_id', 'amount', 'description']).values()
     category_names = [c.strip() for c in request.form.getlist('category_names')]
     t = Transaction.get_by_id(id)
+    if t is None:
+        return 404
     t.update(account_id=account_id,
             amount=currency_string_to_database(amount), description=description,
             category_names=category_names)
