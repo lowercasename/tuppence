@@ -78,9 +78,8 @@ class Pot:
     def delete(self):
         self.repository.delete(self.id)
 
-    def update(self, name, balance, auto_assign, assign_amount, goal_type, goal_amount, goal_date, recurring_day, type, sort_order):
+    def update(self, name, balance, auto_assign, assign_amount, goal_type, goal_amount, goal_date, recurring_day, type):
         self.name = name
-        self.sort_order = sort_order
         self.balance = balance
         self.auto_assign = auto_assign
         self.assign_amount = assign_amount

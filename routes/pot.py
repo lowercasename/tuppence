@@ -97,8 +97,11 @@ def pot_update(id):
         goal_amount = request.form['goal_amount']
         goal_date = request.form['goal_date']
     p = Pot.get_by_id(id)
+    if p is None:
+        return 404
     p.update(name=name, balance=currency_string_to_database(balance), goal_type=goal_type,
-            goal_amount=currency_string_to_database(goal_amount), goal_date=goal_date, recurring_day=recurring_day, type="user")
+            goal_amount=currency_string_to_database(goal_amount), goal_date=goal_date, recurring_day=recurring_day, type="user",
+            auto_assign=False, assign_amount=0)
     p.save()
     return redirect('/pots', code=303)
 
@@ -109,5 +112,8 @@ def pot_reorder():
     if len(order) == 0:
         return '', 200
     for i in range(len(order)):
-        Pot.get_by_id(order[i]).update_sort_order(i)
+        p = Pot.get_by_id(order[i])
+        if p is None:
+            return 404
+        p.update_sort_order(i)
     return redirect('/pots', code=303)
