@@ -9,10 +9,6 @@
     </td>
     <td>
         <div class="transaction-editor__account">
-            <label for="is_transfer" style="font-weight: normal;">
-                <input type="checkbox" name="is_transfer" id="is_transfer" x-on:click="isTransfer = !isTransfer" x-model="isTransfer">
-                Transfer
-            </label>
             <select name="account_id" id="account_id" x-show="!isTransfer">
                 {% for account in accounts %}
                     <option value="{{ account.id }}">{{ account.name }}</option>
@@ -36,6 +32,13 @@
     </td>
     <td>
         <div class="calculated-input">
+            <button
+                type="button"
+                x-on:click="isTransfer = !isTransfer"
+                x-bind:class="isTransfer ? 'transaction-editor__transfer-toggle--active' : 'transaction-editor__transfer-toggle--inactive'"
+            >
+                <i class="fa-solid fa-arrow-up-arrow-down"></i>
+            </button>
             <button
                 type="button"
                 x-on:click="!isTransfer && (sign = (sign == '-' ? '+' : '-'))"

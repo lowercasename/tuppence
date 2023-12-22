@@ -212,7 +212,7 @@ main > table textarea {
 }
 
 .calculated-input button {
-    width: 24px;
+    width: 1.65rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -352,6 +352,15 @@ main > table textarea {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.transaction-editor__transfer-toggle--active {
+    background-color: var(--blue-500);
+    color: #fff;
+}
+
+.transaction-editor__transfer-toggle--active:hover {
+    background-color: var(--blue-700);
 }
 
 .pots {
