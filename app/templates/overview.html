@@ -12,7 +12,7 @@
 
 <h2>Analysis for {{ current_month }}</h2>
 
-<nav id="month-nav">
+<nav id="month-nav" hx-boost="true">
     <ul>
         <li><i class="fa-solid fa-angle-left"></i> <a href="{{ previous_url }}">{{ previous_month }}</a></li>
         <li>{{ current_month }}</li>

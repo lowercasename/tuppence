@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<nav id="month-nav">
+<nav id="month-nav" hx-boost="true">
     <ul>
-        <li><i class="fa-solid fa-angle-left"></i> <a hx-get="{{ previous_url }}" hx-target="body" hx-push-url="true">{{ previous_month }}</a></li>
+        <li><i class="fa-solid fa-angle-left"></i> <a href="{{ previous_url }}">{{ previous_month }}</a></li>
         <li>{{ current_month }}</li>
-        <li><a hx-get="{{ next_url }}" hx-target="body" hx-push-url="true">{{ next_month }}</a> <i class="fa-solid fa-angle-right"></i></li>
+        <li><a href="{{ next_url }}">{{ next_month }}</a> <i class="fa-solid fa-angle-right"></i></li>
     </ul>
 </nav>
 
