@@ -20,7 +20,7 @@ def pot_get(id):
     p = Pot.get_by_id(id)
     if p is None:
         return 404
-    return render_template('pot_single.html', pot=p)
+    return render_template('pot_card.html', pot=p)
 
 
 @app.route('/pots/<id>/editor', methods=['GET'])
@@ -29,7 +29,7 @@ def pot_editor(id):
     p = Pot.get_by_id(id)
     if p is None:
         return 404
-    return render_template('pot_editor.html', pot=p)
+    return render_template('pot_card_editor.html', pot=p)
 
 
 @app.route('/pots/<id>', methods=['DELETE'])

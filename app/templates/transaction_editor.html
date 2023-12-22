@@ -22,26 +22,24 @@
         </select>
     </td>
     <td>
-        <div class="transaction-editor__amount">
+        <div class="calculated-input">
             <button
                 type="button"
                 x-on:click="sign = (sign == '-' ? '+' : '-')"
                 x-html="sign == '-' ? '<i class=\'fa-solid fa-minus\'></i>' : '<i class=\'fa-solid fa-plus\'></i>'"
             ></button>
-            <div class="transaction-editor__amount__input">
-                <input
-                    type="text"
-                    autofocus
-                    x-model="amount"
-                    x-on:input="calculateAmount"
-                >
-                <span
-                    class="transaction-editor__amount__calculated"
-                    x-text="(sign === '+' ? '' : '-') + '£' + calculatedAmount"
-                    x-show="calculatedAmount != amount"
-                ></span>
-                <input type="hidden" id="amount" name="amount" x-bind:value="calculatedAmount * (sign === '+' ? 1 : -1)">
-            </div>
+            <input
+                type="text"
+                autofocus
+                x-model="amount"
+                x-on:input="calculateAmount"
+            >
+            <span
+                class="calculated-input__calculated"
+                x-text="(sign === '+' ? '' : '-') + '£' + calculatedAmount"
+                x-show="calculatedAmount != amount"
+            ></span>
+            <input type="hidden" id="amount" name="amount" x-bind:value="calculatedAmount * (sign === '+' ? 1 : -1)">
         </div>
     </td>
     <td><input type="text" name="description" id="description" value="{{ transaction.description }}"></td>

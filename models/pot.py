@@ -2,9 +2,9 @@ import json
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from flask import session
+from colorhash import ColorHash
 
 from lib.db import Database
-
 
 class Pot:
     def __init__(self, id=None, created=None, user_id=None, name=None, balance=None, auto_assign=False, assign_amount=0, goal_type=None, goal_amount=0, goal_date=None, recurring_day=None, type=None, sort_order=None):
@@ -27,7 +27,7 @@ class Pot:
         # recurring: assign a certain amount every month on a certain date
         self.goal_type = goal_type
         self.goal_type_label = self.goal_type_to_string()
-        # If goal_type is goal-amount, this is the amount to assign
+        # If goal_type is goal-amount or recurring, this is the amount to assign
         self.goal_amount = goal_amount
         # If goal_type is goal-date, this is the date to assign by
         # goal-date is always the first of the month
@@ -63,6 +63,8 @@ class Pot:
                 (self.balance / self.goal_amount) * 100, 2)
         if self.percent_complete > 100:
             self.percent_complete = 100
+
+        self.color = ', '.join(map(str, ColorHash(self.name, lightness=[0.3], saturation=[0.95]).rgb))
 
         self.repository = SQLitePotRepository(Database("tuppence.db"))
 
@@ -105,9 +107,9 @@ class Pot:
 
     def goal_type_to_string(self):
         if self.goal_type == 'goal-amount':
-            return 'Save a certain amount'
+            return 'Save amount'
         elif self.goal_type == 'goal-date':
-            return 'Save a certain amount by a certain date'
+            return 'Save amount by date'
         elif self.goal_type == 'recurring':
             return 'Recurring expense'
         else:

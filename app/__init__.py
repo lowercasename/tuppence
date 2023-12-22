@@ -53,8 +53,18 @@ def format_price(s):
         return f'£0.00'
     return currency_database_to_string(int(s))
 
+@app.template_filter('price_floor')
+def format_price_floor(s):
+    if s is None or s == '':
+        return f'£0.00'
+    return currency_database_to_string(int(s), floor=True)
+
 @app.template_global('is_authenticated')
 def is_authenticated():
     return 'user_id' in session
+
+@app.template_filter('floor')
+def floor(s):
+    return int(s)
 
 from routes import auth, overview, account, pot, transaction

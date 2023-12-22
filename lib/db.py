@@ -117,10 +117,6 @@ class Database:
                 UPDATE accounts SET balance = balance + NEW.amount WHERE id = NEW.account_id;
                 UPDATE pots SET balance = balance + NEW.amount WHERE id = NEW.pot_id;
             END;""")
-        # Create a default 'Unassigned' pot
-        self.cur.execute("""
-            INSERT OR IGNORE INTO pots (name, type) VALUES ('Unassigned', 'internal');
-        """)
         self.cur.execute("""
             INSERT OR IGNORE INTO settings (name, value) VALUES ('allow_registration', '1');
         """)
