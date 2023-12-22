@@ -402,7 +402,7 @@ main > table textarea {
     padding: 1rem;
     color: #fff;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2), 0 0 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.2s ease-in-out;
+    transition: box-shadow 0.2s ease-in-out, scale 0.2s ease-in-out, translate 0.2s ease-in-out;
 }
 
 .pot-card:hover {
@@ -542,4 +542,5 @@ main > table textarea {
 
 .pot-card.sortable-ghost {
     background: linear-gradient(0deg, rgb(72, 72, 72) 0%, rgb(72, 72, 72, 0.6) 100%);
+    scale: 1.05;
 }
