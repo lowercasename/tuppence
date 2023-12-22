@@ -1,4 +1,4 @@
-<tr draggable='true' ondragstart='start()' ondragover='dragover()' ondragend='drop()' class="account-row" data-account-id="{{ account.id }}">
+<tr class="account-row">
     <td>{{ account.name }}</td>
     <td>{{ account.balance | price }}</td>
     <td><div class="text--small">{{ account.notes_html | safe }}</div></td>
@@ -15,6 +15,8 @@
                     }
                     htmx.trigger($el, 'edit');
                 "
+                hx-target="closest tr"
+                hx-swap="outerHTML"
             >
                 Edit
             </button>
@@ -25,4 +27,5 @@
             >Delete</button>
         </div>
     </td>
+    <input type="hidden" name="account_id" value="{{ account.id }}">
 </tr>

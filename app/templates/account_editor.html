@@ -1,10 +1,10 @@
-<tr hx-trigger='cancel' class='editing' hx-get="/accounts/{{account.id}}">
+<tr hx-trigger='cancel' class='editing' hx-get="/accounts/{{account.id}}" hx-swap="outerHTML" hx-target="closest tr">
     <td><input type="text" name="name" id="name" value="{{ account.name }}"></td>
     <td><input type="number" name="balance" id="balance" value="{{ account.balance / 100 }}"></td>
     <td><textarea name="notes" id="notes">{{account.notes}}</textarea></td>
     <td>
         <div class="account-editor__actions">
-            <button hx-get="/accounts/{{account.id}}">
+            <button hx-get="/accounts/{{account.id}}" hx-swap="outerHTML" hx-target="closest tr">
                 Cancel
             </button>
             <button

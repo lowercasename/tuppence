@@ -398,7 +398,7 @@ main > table textarea {
 
 .pot-card {
     border-radius: 1rem;
-    background: linear-gradient(0deg, rgb(var(--pot-color)) 0%, rgb(var(--pot-color), 0.7) 100%);
+    background: linear-gradient(0deg, rgba(var(--pot-color)) 0%, rgba(var(--pot-color), 0.7) 100%);
     padding: 1rem;
     color: #fff;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2), 0 0 4px rgba(0, 0, 0, 0.1);
@@ -538,4 +538,8 @@ main > table textarea {
     margin-bottom: 0;
     font-size: 1.2rem;
     margin-right: 0.5rem;  
+}
+
+.pot-card.sortable-ghost {
+    background: linear-gradient(0deg, rgb(72, 72, 72) 0%, rgb(72, 72, 72, 0.6) 100%);
 }

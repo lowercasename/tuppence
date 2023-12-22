@@ -4,10 +4,11 @@
 
 <h2>Pots</h2>
 
-<div class="pots" x-data>
+<div class="pots" x-data hx-post="/pots/reorder" hx-trigger="end" hx-include="input[name='pot_id']" hx-target="body">
     {% for pot in pots %}
        {% include 'pot_card.html' %} 
     {% endfor %}
 </div>
 
+<script defer src="{{ url_for('static', filename='js/pots.js') }}"></script>
 {% endblock %}

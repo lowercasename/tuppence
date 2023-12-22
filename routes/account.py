@@ -60,9 +60,12 @@ def account_editor(id):
 @app.route('/accounts/reorder', methods=['POST'])
 @with_auth
 def account_reorder():
-    order = request.get_json()
+    order = request.form.getlist('account_id')   
     if len(order) == 0:
-        return '', 200
+        return 400
     for i in range(len(order)):
-        Account.get_by_id(order[i]).update_sort_order(i)
+        a = Account.get_by_id(order[i])
+        if a is None:
+            return 400
+        a.update_sort_order(i)
     return redirect('/accounts', code=303)

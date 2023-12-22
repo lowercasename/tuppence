@@ -108,9 +108,9 @@ def pot_update(id):
 @app.route('/pots/reorder', methods=['POST'])
 @with_auth
 def pot_reorder():
-    order = request.get_json()
+    order = request.form.getlist('pot_id')   
     if len(order) == 0:
-        return '', 200
+        return 400
     for i in range(len(order)):
         p = Pot.get_by_id(order[i])
         if p is None:
