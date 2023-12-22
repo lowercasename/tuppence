@@ -47,6 +47,9 @@ def transaction_create():
     except ValueError:
         return 'Invalid amount', 400
     is_transfer = bool(request.form.get('is_transfer', False))
+    # If this is a transfer, we need to swap the sign of the amount
+    if is_transfer:
+        amount = -amount
     user_id = session['user_id']
     category_names = [c.strip() for c in request.form.getlist('category_names')]
     print(category_names)
