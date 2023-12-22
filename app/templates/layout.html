@@ -15,7 +15,7 @@
             <img class="header__icon" src="{{ url_for('static', filename='coins.png') }}"/>
             Tuppence
         </h1>
-        <nav id="header-nav">
+        <nav id="header-nav" hx-boost="true">
             <ul>
                 {% if is_authenticated() %}
                     <li><a href="/" {% if current_page == '/' %}class="current"{% endif %}>Overview</a></li>
