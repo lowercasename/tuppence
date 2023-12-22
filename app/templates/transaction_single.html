@@ -1,7 +1,9 @@
 <tr>
     <td>{{ transaction.created.strftime('%d/%m/%Y') }}</td>
     <td>{{ transaction.account_name }}</td>
-    <td>{{ transaction.amount | price }}</td>
+    <td class="transaction__amount transaction__amount--{% if transaction.amount < 0 %}debit{% else %}credit{% endif %}">
+        {{ transaction.amount | price }}
+    </td>
     <td>{{ transaction.description }}</td>
     <td>
         <div class="transaction__categories">

@@ -17,6 +17,9 @@
     --blue-900: #002d5a;
 
     --black: rgb(27, 27, 27);
+
+    --green: rgb(32, 151, 51);
+    --red: rgb(208, 96, 96);
 }
 
 *, *:before, *:after {
@@ -141,8 +144,6 @@ img.header__icon {
         margin: 0;
     }
 }
-
-
 
 body > main {
     margin: 0 auto;
@@ -361,6 +362,14 @@ main > table textarea {
 
 .transaction-editor__transfer-toggle--active:hover {
     background-color: var(--blue-700);
+}
+
+.transaction__amount--debit {
+    color: var(--red);
+}
+
+.transaction__amount--credit {
+    color: var(--green);
 }
 
 .pots {
