@@ -8,7 +8,7 @@ from models.category import Category
 from models.transaction_category import TransactionCategory
 
 class Transaction:
-    def __init__(self, id=None, hashid=None, created=None, user_id=None, amount=None, description=None, is_transfer=None, account_id=None, account_name=None, category_names=None):
+    def __init__(self, id=None, hashid=None, created=None, user_id=None, amount=0, description=None, is_transfer=None, account_id=None, account_name=None, category_names=None):
         self.id = id
         self.hashid = hashid
         self.created = datetime.strptime(created, '%Y-%m-%d %H:%M:%S') if created is not None else None
