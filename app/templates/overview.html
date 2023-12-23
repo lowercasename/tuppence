@@ -10,15 +10,19 @@
 
 <p><strong>{{ pot_balance | price }}</strong> is distributed among your pots.</p>
 
-<h2>Analysis for {{ current_month }}</h2>
-
 <nav id="month-nav" hx-boost="true">
     <ul>
         <li><i class="fa-solid fa-angle-left"></i> <a href="{{ previous_url }}">{{ previous_month }}</a></li>
         <li>{{ current_month }}</li>
-        <li><a href="{{ next_url }}">{{ next_month }}</a> <i class="fa-solid fa-angle-right"></i></li>
+        {% if next_month %}
+            <li><a href="{{ next_url }}">{{ next_month }}</a> <i class="fa-solid fa-angle-right"></i></li>
+        {% endif %}
     </ul>
 </nav>
+
+<h2>Analysis for {{ current_month }}</h2>
+
+<p>You spent <strong>{{ month_expenses | price }}</strong> this month and earned <strong>{{ month_income | price }}</strong>, for a net {% if month_expenses > month_income %}loss{% else %}gain{% endif %} of <strong>{{ month_balance | price }}</strong>.</p>
 
 <div class="grid">
     <div>
@@ -33,6 +37,8 @@
 // These have to be var because HTMX re-evaluates the script tag
 // when using hx-boost
 var categoriesData = {{ categories_chart | safe }}
+var lastYearCategoriesData = {{ last_year_categories_chart | safe }}
+var lastMonthCategoriesData = {{ last_month_categories_chart | safe }}
 var balanceData = {{ balance_chart | safe }}
 </script>
 

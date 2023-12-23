@@ -45,10 +45,20 @@ new Chart(categoriesCtx, {
     type: 'bar',
     data: {
         labels: categoriesData.map(a => a.name),
-        datasets: [{
-            label: 'Spending',
-            data: categoriesData.map(a => Math.abs(a.amount / 100)),
-        }]
+        datasets: [
+            {
+                label: 'This Month',
+                data: categoriesData.map(a => Math.abs(a.amount / 100)),
+            },
+            {
+                label: 'Last Month',
+                data: lastMonthCategoriesData.map(a => Math.abs(a.amount / 100)),
+            },
+            {
+                label: 'Last Year',
+                data: lastYearCategoriesData.map(a => Math.abs(a.amount / 100)),
+            },
+        ]
     },
     options: {
         scales: {

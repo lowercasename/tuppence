@@ -22,16 +22,20 @@ def make_session_permanent():
 
 @app.context_processor
 def inject_month_year():
+    path = request.path
     month = validate_month(request.args.get('m'))
     year = validate_year(request.args.get('y'))
     current_datetime = datetime.strptime(f'{year}-{month}', '%Y-%m')
     current_label = current_datetime.strftime("%B %Y")
     next_month = current_datetime + relativedelta.relativedelta(months=1)
-    previous_month = current_datetime - relativedelta.relativedelta(months=1)
     next_label = next_month.strftime("%B %Y")
-    previous_label = previous_month.strftime("%B %Y")
-    path = request.path
     next_url = f'{path}?m={next_month.month}&y={next_month.year}'
+    if next_month > datetime.now():
+        next_month = None
+        next_label = None
+        next_url = None
+    previous_month = current_datetime - relativedelta.relativedelta(months=1)
+    previous_label = previous_month.strftime("%B %Y")
     previous_url = f'{path}?m={previous_month.month}&y={previous_month.year}'
 
     # Other fields
