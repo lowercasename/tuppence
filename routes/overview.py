@@ -29,6 +29,8 @@ def overview():
     month_income = 0
     month_balance = 0
     for transaction in t:
+        if transaction.is_transfer == True:
+            continue
         if transaction.amount > 0:
             month_income += transaction.amount
         else:
