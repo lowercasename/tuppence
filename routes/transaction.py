@@ -46,13 +46,12 @@ def transaction_create():
         amount = currency_string_to_database(amount)
     except ValueError:
         return 'Invalid amount', 400
-    is_transfer = bool(request.form.get('is_transfer', False))
+    is_transfer = False if request.form.get('is_transfer') is '0' else True
     # If this is a transfer, we need to swap the sign of the amount
     if is_transfer:
         amount = -amount
     user_id = session['user_id']
     category_names = [c.strip() for c in request.form.getlist('category_names')]
-    print(category_names)
 
     if is_transfer:
         # We create two transactions, one for the source account and one for the destination account

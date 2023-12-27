@@ -39,6 +39,7 @@
             >
                 <i class="fa-solid fa-arrow-up-arrow-down"></i>
             </button>
+            <input type="hidden" name="is_transfer" id="is_transfer" x-bind:value="isTransfer ? 1 : 0">
             <button
                 type="button"
                 x-on:click="!isTransfer && (sign = (sign == '-' ? '+' : '-'))"
