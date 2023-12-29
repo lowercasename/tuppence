@@ -183,7 +183,7 @@ main > table p {
 
 main > table input[type="text"],
 main > table input[type="date"],
-main > table input[type="number"]
+main > table input[type="number"],
 main > table select,
 main > table textarea {
     width: 100%;
@@ -543,4 +543,23 @@ main > table textarea {
 .pot-card.sortable-ghost {
     background: linear-gradient(0deg, rgb(72, 72, 72) 0%, rgb(72, 72, 72, 0.6) 100%);
     scale: 1.05;
+}
+
+form.form-stacked {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    border: 1px solid var(--grey-300);
+    border-radius: 1rem;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+}
+form.form-stacked  input,
+form.form-stacked  select,
+form.form-stacked  textarea,
+form.form-stacked  button {
+    width: 100%;
+    margin-bottom: 1rem;
 }
