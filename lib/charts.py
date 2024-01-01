@@ -23,16 +23,16 @@ def balance_history(month: int, year: int):
     for day in range(1, days_in_month + 1):
         for i, account in enumerate(accounts_balances):
             balance = accounts[i].balance
-            if len(transactions_for_month) == 0 or transactions_for_month[-1].created is None:
+            if len(transactions_for_month) == 0 or transactions_for_month[-1].date is None:
                 continue
             # If there are no transactions before this day, we set the balance to 0
-            if len(transactions_for_month) > 0 and transactions_for_month[-1].created.day > day:
+            if len(transactions_for_month) > 0 and transactions_for_month[-1].date.day > day:
                 balance = 0
             else:
                 for transaction in transactions_for_month:
-                    if transaction.created is None:
+                    if transaction.date is None:
                         continue
-                    if transaction.account_id == accounts[i].id and transaction.created.day > day:
+                    if transaction.account_id == accounts[i].id and transaction.date and transaction.date.day > day:
                         balance -= transaction.amount
             account['balances'].append(balance)
 

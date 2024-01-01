@@ -8,10 +8,10 @@ from models.category import Category
 from models.transaction_category import TransactionCategory
 
 class Transaction:
-    def __init__(self, id=None, hashid=None, created=None, user_id=None, amount=0, description=None, is_transfer=None, account_id=None, account_name=None, category_names=None):
+    def __init__(self, id=None, hashid=None, date=None, user_id=None, amount=0, description=None, is_transfer=None, account_id=None, account_name=None, category_names=None):
         self.id = id
         self.hashid = hashid
-        self.created = datetime.strptime(created, '%Y-%m-%d %H:%M:%S') if created is not None else None
+        self.date = self.prepare_date(date)
         self.user_id = user_id
         self.account_id = account_id
         self.account_name = account_name
@@ -59,11 +59,19 @@ class Transaction:
         # Delete the transaction
         self.repository.delete(self.id)
 
-    def update(self, account_id, amount, description, category_names):
+    def update(self, account_id, amount, description, category_names, date):
         self.account_id = account_id
         self.amount = amount
         self.description = description
         self.category_names = category_names
+        self.date = self.prepare_date(date)
+
+    def prepare_date(self, date):
+        if date is None:
+            return datetime.now()
+        if len(date) == 10:
+            date = f"{date} 00:00:00"
+        return datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
         
     @classmethod
     def get_by_id(self, id):
@@ -76,7 +84,7 @@ class Transaction:
         return repository.get_all(month, year)
 
 class SQLiteTransactionRepository:
-    fields = ['id', 'hashid', 'created', 'user_id', 'account_id', 'amount', 'description', 'is_transfer']
+    fields = ['id', 'hashid', 'date', 'user_id', 'account_id', 'amount', 'description', 'is_transfer']
 
     def __init__(self, db):
         self.db = db
@@ -84,8 +92,8 @@ class SQLiteTransactionRepository:
     def create(self, transaction):
         transaction.user_id = session['user_id']
         self.db.query("""
-                    INSERT INTO transactions (user_id, account_id, amount, description, is_transfer)
-                    VALUES (:user_id, :account_id, :amount, :description, :is_transfer)
+                    INSERT INTO transactions (user_id, account_id, amount, description, is_transfer, date)
+                    VALUES (:user_id, :account_id, :amount, :description, :is_transfer, :date)
                     """, transaction.__dict__)
         self.db.set_hashid("transactions")
         transaction.id = self.db.last_row_id()
@@ -93,7 +101,7 @@ class SQLiteTransactionRepository:
     def get_all(self, month=None, year=None):
         user_id = session['user_id']
         sql = """
-        SELECT t.id, t.hashid, t.created, t.user_id, t.amount, t.description, t.is_transfer, a.id as account_id, a.name as account_name, 
+        SELECT t.id, t.hashid, t.date, t.user_id, t.amount, t.description, t.is_transfer, a.id as account_id, a.name as account_name, 
         GROUP_CONCAT(c.name) as category_names
         FROM transactions t
             LEFT OUTER JOIN accounts a on a.id = t.account_id
@@ -102,10 +110,10 @@ class SQLiteTransactionRepository:
         WHERE t.user_id = :user_id
         {{date_sql}}
         GROUP BY t.id
-        ORDER BY t.created DESC;
+        ORDER BY t.date DESC;
         """
         if month is not None and year is not None:
-            date_sql = "AND strftime('%m', t.created) = :month AND strftime('%Y', t.created) = :year"
+            date_sql = "AND strftime('%m', t.date) = :month AND strftime('%Y', t.date) = :year"
             sql = sql.replace("{{date_sql}}", date_sql)
             t = self.db.fetch_all(sql, {
                 'user_id': user_id,
@@ -121,7 +129,7 @@ class SQLiteTransactionRepository:
     def get_by_id(self, id):
         user_id = session['user_id']
         t = self.db.fetch_one("""
-            SELECT t.id, t.hashid, t.created, t.user_id, t.amount, t.description, t.is_transfer, a.id as account_id, a.name as account_name, 
+            SELECT t.id, t.hashid, t.date, t.user_id, t.amount, t.description, t.is_transfer, a.id as account_id, a.name as account_name, 
             GROUP_CONCAT(c.name) as category_names
             FROM transactions t
                 LEFT OUTER JOIN accounts a on a.id = t.account_id
@@ -130,7 +138,7 @@ class SQLiteTransactionRepository:
             WHERE t.id = :id    
             AND t.user_id = :user_id
             GROUP BY t.id
-            ORDER BY t.created DESC;
+            ORDER BY t.date DESC;
         """, ({
             'id': id,
             'user_id': user_id
@@ -148,7 +156,7 @@ class SQLiteTransactionRepository:
         transaction.user_id = session['user_id']
         self.db.query("""
             UPDATE transactions
-            SET account_id = :account_id, amount = :amount, description = :description
+            SET account_id = :account_id, amount = :amount, description = :description, date = :date
             WHERE id = :id
             AND user_id = :user_id
         """, transaction.__dict__)

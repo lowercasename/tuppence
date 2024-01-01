@@ -5,7 +5,7 @@
     calculatedAmount: 0,
 }">
     <td>
-        <input type="date" name="created" id="created" value="{{ current_date }}">
+        <input type="date" name="date" id="date" value="{{ current_date }}">
     </td>
     <td>
         <div class="transaction-editor__account">
@@ -94,6 +94,6 @@
     <td><button
         hx-post="/transactions"
         hx-target="body"
-        hx-include="#created, #account_id, #pot_id, #amount, #description, #is_transfer, #transfer_source_id, #transfer_destination_id, input[name='category_names']"
+        hx-include="#date, #account_id, #pot_id, #amount, #description, #is_transfer, #transfer_source_id, #transfer_destination_id, input[name='category_names']"
     >Add</button></td>
 </tr>

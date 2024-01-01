@@ -8,8 +8,8 @@
         calculatedAmount: "{% if transaction.amount < 0 %}{{ transaction.amount / 100 * -1 }}{% else %}{{ transaction.amount / 100 }}{% endif %}",
     }'
 >
-    <td><input type="date" name="created" id="created"
-        value="{{ transaction.created.strftime('%Y-%m-%d') }}"
+    <td><input type="date" name="date" id="date"
+        value="{{ transaction.date.strftime('%Y-%m-%d') }}"
     ></td>
     <td>
         <select name="account_id" id="account_id">

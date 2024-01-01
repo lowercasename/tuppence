@@ -39,8 +39,8 @@ def transaction_delete(id: int):
 @app.route('/transactions', methods=['POST'])
 @with_auth
 def transaction_create():
-    account_id, amount, description, transfer_source_id, transfer_destination_id = validate_form_fields(
-        ['account_id', 'amount', 'description', 'transfer_source_id', 'transfer_destination_id']).values()
+    account_id, amount, description, transfer_source_id, transfer_destination_id, date = validate_form_fields(
+        ['account_id', 'amount', 'description', 'transfer_source_id', 'transfer_destination_id', 'date']).values()
     # We expect to receive the amount as a float string with the sign already applied
     try:
         amount = currency_string_to_database(amount)
@@ -57,16 +57,16 @@ def transaction_create():
         # We create two transactions, one for the source account and one for the destination account
         source_transaction = Transaction(user_id=user_id, account_id=transfer_source_id,
                                         amount=-amount, description=description, is_transfer=True,
-                                        category_names=category_names)
+                                        category_names=category_names, date=date)
         destination_transaction = Transaction(user_id=user_id, account_id=transfer_destination_id,
                                         amount=amount, description=description, is_transfer=True,
-                                        category_names=category_names)
+                                        category_names=category_names, date=date)
         source_transaction.save()
         destination_transaction.save()
     else:
         t = Transaction(user_id=user_id, account_id=account_id,
                         amount=amount, description=description, is_transfer=False,
-                        category_names=category_names)
+                        category_names=category_names, date=date)
         t.save()
     return redirect('/transactions', code=303)
 
@@ -74,15 +74,15 @@ def transaction_create():
 @app.route('/transactions/<id>', methods=['PUT'])
 @with_auth
 def transaction_update(id):
-    account_id, amount, description = validate_form_fields(
-        ['account_id', 'amount', 'description']).values()
+    account_id, amount, description, date = validate_form_fields(
+        ['account_id', 'amount', 'description', 'date']).values()
     category_names = [c.strip() for c in request.form.getlist('category_names')]
     t = Transaction.get_by_id(id)
     if t is None:
         return 404
     t.update(account_id=account_id,
             amount=currency_string_to_database(amount), description=description,
-            category_names=category_names)
+            category_names=category_names, date=date)
     t.save()
     return redirect('/transactions', code=303)
 

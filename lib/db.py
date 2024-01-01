@@ -1,7 +1,6 @@
 import sqlite3
 from hashids import Hashids
 
-
 class Database:
     def __init__(self, db):
         self.conn = sqlite3.connect(db, check_same_thread=False)
@@ -57,6 +56,7 @@ class Database:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 hashid TEXT UNIQUE NOT NULL DEFAULT '',
                 created DATETIME DEFAULT CURRENT_TIMESTAMP,
+                date DATE NOT NULL DEFAULT 0,
                 user_id INTEGER NOT NULL,
                 pot_id INTEGER,
                 account_id INTEGER,
