@@ -68,9 +68,12 @@ class Transaction:
 
     def prepare_date(self, date):
         if date is None:
+            # If date is None, use the current date and time
             return datetime.now()
         if len(date) == 10:
-            date = f"{date} 00:00:00"
+            # If date is just a date, add the current time
+            now = datetime.now()
+            date = f"{date} {now.hour}:{now.minute}:{now.second}"
         return datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
         
     @classmethod
