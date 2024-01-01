@@ -4,7 +4,7 @@
 
 <h2>Accounts</h2>
 
-<table>
+<table class="data-table">
     <thead>
     <tr>
         <th>Name</th>
@@ -29,11 +29,32 @@
             hx-include="#name, #balance, #notes"
         >Add</button></td>
     </tr>
-    {% for account in accounts %}
+    {% for account in unarchived %}
         {% include 'account_single.html' %}
     {% endfor %}
     </tbody>
 </table>
+
+{% if archived | length > 0 %}
+<details class="archived">
+    <summary>Show archived accounts</summary>
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Balance</th>
+            <th>Notes</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for account in archived %}
+            {% include 'account_single.html' %}
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+{% endif %}
 
 <script defer src="{{ url_for('static', filename='js/accounts.js') }}"></script>
 {% endblock %}

@@ -10,20 +10,20 @@
     <td>
         <div class="transaction-editor__account">
             <select name="account_id" id="account_id" x-show="!isTransfer">
-                {% for account in accounts %}
+                {% for account in accounts | rejectattr('archived', 'eq', 1) %}
                     <option value="{{ account.id }}">{{ account.name }}</option>
                 {% endfor %}
             </select>
             <div x-show="isTransfer" style="display: none;">
                 <label for="transfer_source_id">From</label>
                 <select name="transfer_source_id" id="transfer_source_id">
-                    {% for account in accounts %}
+                    {% for account in accounts | rejectattr('archived', 'eq', 1) %}
                         <option value="{{ account.id }}">{{ account.name }}</option>
                     {% endfor %}
                 </select>
                 <label for="transfer_destination_id">To</label>
                 <select name="transfer_destination_id" id="transfer_destination_id">
-                    {% for account in accounts %}
+                    {% for account in accounts | rejectattr('archived', 'eq', 1) %}
                         <option value="{{ account.id }}">{{ account.name }}</option>
                     {% endfor %}
                 </select>

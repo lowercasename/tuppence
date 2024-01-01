@@ -9,8 +9,9 @@ from lib.strings import currency_string_to_database
 @with_auth
 def account_list():
     a = Account.get_all()
-    return render_template('accounts.html', accounts=a)
-
+    unarchived = [x for x in a if not x.archived]
+    archived = [x for x in a if x.archived]
+    return render_template('accounts.html', unarchived=unarchived, archived=archived)
 
 @app.route('/accounts/<id>')
 @with_auth
@@ -21,11 +22,11 @@ def account_get(id):
     return render_template('account_single.html', account=a)
 
 
-@app.route('/accounts/<id>', methods=['DELETE'])
-@with_auth
-def account_delete(id):
-    Account.get_by_id(id).delete()
-    return redirect('/accounts', code=303)
+# @app.route('/accounts/<id>', methods=['DELETE'])
+# @with_auth
+# def account_delete(id):
+#     Account.get_by_id(id).delete()
+#     return redirect('/accounts', code=303)
 
 
 @app.route('/accounts', methods=['POST'])
@@ -43,7 +44,7 @@ def account_create():
 def account_update(id):
     name, balance, notes = validate_form_fields(['name', 'balance', 'notes']).values()
     a = Account.get_by_id(id)
-    a.update(name=name, balance=currency_string_to_database(balance), notes=notes)
+    a.update(name=name, balance=currency_string_to_database(balance), notes=notes, archived=False)
     a.save()
     return redirect('/accounts', code=303)
 
@@ -68,4 +69,24 @@ def account_reorder():
         if a is None:
             return 400
         a.update_sort_order(i)
+    return redirect('/accounts', code=303)
+
+@app.route('/accounts/<id>/archive', methods=['POST'])
+@with_auth
+def account_archive(id):
+    a = Account.get_by_id(id)
+    if a is None:
+        return 404
+    a.update(name=a.name, balance=a.balance, notes=a.notes, archived=True)
+    a.save()
+    return redirect('/accounts', code=303)
+
+@app.route('/accounts/<id>/unarchive', methods=['POST'])
+@with_auth
+def account_unarchive(id):
+    a = Account.get_by_id(id)
+    if a is None:
+        return 404
+    a.update(name=a.name, balance=a.balance, notes=a.notes, archived=False)
+    a.save()
     return redirect('/accounts', code=303)

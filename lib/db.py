@@ -32,6 +32,7 @@ class Database:
                 balance INTEGER NOT NULL DEFAULT 0,
                 notes TEXT,
                 sort_order INTEGER NOT NULL DEFAULT 0,
+                archived BOOLEAN NOT NULL DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES users (id)
             );""")
         self.cur.execute("""

@@ -13,7 +13,7 @@
     ></td>
     <td>
         <select name="account_id" id="account_id">
-            {% for account in accounts %}
+            {% for account in accounts | rejectattr('archived', 'eq', 1) %}
                 <option
                     value="{{ account.id }}"
                     {% if account.id == transaction.account_id %}selected{% endif %}

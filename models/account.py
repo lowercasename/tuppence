@@ -5,7 +5,7 @@ from lib.db import Database
 from flask import session
 
 class Account:
-    def __init__(self, id=None, created=None, user_id=None, name=None, balance=None, notes=None, sort_order=None):
+    def __init__(self, id=None, created=None, user_id=None, name=None, balance=None, notes=None, sort_order=None, archived=None):
         self.id = id
         self.created = datetime.strptime(created, '%Y-%m-%d %H:%M:%S') if created is not None else None
         self.user_id = user_id
@@ -14,6 +14,7 @@ class Account:
         self.notes = notes if notes is not None else ""
         self.notes_html = commonmark.commonmark(notes) if notes is not None else ""
         self.sort_order = sort_order
+        self.archived = archived
 
         self.repository = SQLiteAccountRepository(Database("tuppence.db"))
 
@@ -26,11 +27,12 @@ class Account:
     def delete(self):
         self.repository.delete(self.id)
 
-    def update(self, name, balance, notes):
+    def update(self, name, balance, notes, archived):
         self.name = name
         self.balance = balance
         self.notes = notes
         self.notes_html = commonmark.commonmark(notes)
+        self.archived = archived
 
     def update_sort_order(self, sort_order):
         self.sort_order = sort_order
@@ -51,13 +53,13 @@ class Account:
     
 
 class SQLiteAccountRepository:
-    fields = ['id', 'created', 'user_id', 'name', 'balance', 'notes', 'sort_order']
+    fields = ['id', 'created', 'user_id', 'name', 'balance', 'notes', 'sort_order', 'archived']
 
     def __init__(self, db):
         self.db = db
 
     def create(self, account):
-        self.db.query("INSERT INTO accounts (user_id, name, balance, notes, sort_order) VALUES (:user_id, :name, :balance, :notes, :sort_order)", account.__dict__)
+        self.db.query("INSERT INTO accounts (user_id, name, balance, notes, sort_order, archived) VALUES (:user_id, :name, :balance, :notes, :sort_order, 0)", account.__dict__)
 
     def get_by_id(self, id):
         fields = ', '.join(self.fields)
@@ -80,7 +82,7 @@ class SQLiteAccountRepository:
     def update(self, id, account):
         account.id = id
         account.user_id = session['user_id']
-        self.db.query("UPDATE accounts SET name = :name, balance = :balance, notes = :notes WHERE id = :id AND user_id = :user_id", account.__dict__)
+        self.db.query("UPDATE accounts SET name = :name, balance = :balance, notes = :notes, archived = :archived WHERE id = :id AND user_id = :user_id", account.__dict__)
 
     def update_sort_order(self, id, sort_order):
         self.db.query("UPDATE accounts SET sort_order = :sort_order WHERE id = :id AND user_id = :user_id", {
