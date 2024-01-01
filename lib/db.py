@@ -110,7 +110,7 @@ class Database:
                 UPDATE pots SET balance = balance - OLD.amount WHERE id = OLD.pot_id;
             END;""")
         self.cur.execute("""
-            INSERT OR IGNORE INTO settings (name, value) VALUES ('allow_registration', '1');
+            INSERT OR IGNORE INTO settings (name, value) VALUES ('allow_registration', '0');
         """)
         self.conn.commit()
 

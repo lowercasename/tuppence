@@ -2,18 +2,20 @@ import traceback
 from app import app
 from flask import render_template, redirect, session, flash
 from lib.server import validate_form_fields, MissingFieldException
+from models.settings import Settings
 from models.user import User
 from lib.email import EmailException, send_verify_email, send_login_email
 from sqlite3 import IntegrityError
 
 @app.route('/register', methods=['GET'])
 def register_get():
-    return render_template('register.html')
+    allow_registration = Settings.get('allow_registration')
+    return render_template('register.html', allow_registration=allow_registration)
 
 @app.route('/register', methods=['POST'])
 def register_post():
-    # if not db.get_setting('allow_registration'):
-    #     return 'Registrations are closed.', 403
+    if not Settings.get('allow_registration'):
+        return 'Registrations are closed.', 403
     try:
         email_address, = validate_form_fields(['email_address']).values()
         user = User(email_address=email_address)
