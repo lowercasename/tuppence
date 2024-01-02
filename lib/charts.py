@@ -10,10 +10,10 @@ def balance_history(month: int, year: int):
     if month is None or year is None:
         month = now.month
         year = now.year
-    if year == now.year and month == now.month:
-        days_in_month = now.day
-    else:
-        days_in_month = monthrange(year, month)[1]
+    # if year == now.year and month == now.month:
+    #     days_in_month = now.day
+    # else:
+    days_in_month = monthrange(year, month)[1]
     accounts = Account.get_all()
     accounts_balances = [{
         'name': a.name,
