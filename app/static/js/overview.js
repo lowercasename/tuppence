@@ -6,7 +6,7 @@ var categoriesCtx = document.getElementById('categoriesChart');
 new Chart(balanceCtx, {
     type: 'line',
     data: {
-        labels: balanceData[0].balances.map((_, i) => i),
+        labels: Array(balanceData[0].days_in_month).fill().map((_, i) => i + 1),
         datasets: balanceData.map(a => ({
             label: a.name,
             data: a.balances.map(b => b / 100),
@@ -32,6 +32,9 @@ new Chart(balanceCtx, {
         plugins: {
             tooltip: {
                 callbacks: {
+                    title: function (context) {
+                        return `${ordinalOf(context[0].dataIndex + 1)} ${monthName}`;
+                    },
                     label: function (context) {
                         return context.dataset.label + ': ' + context.parsed.y.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
                     }

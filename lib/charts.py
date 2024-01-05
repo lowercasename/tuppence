@@ -10,18 +10,18 @@ def balance_history(month: int, year: int):
     if month is None or year is None:
         month = now.month
         year = now.year
-    # if year == now.year and month == now.month:
-    #     days_in_month = now.day
-    # else:
     days_in_month = monthrange(year, month)[1]
     accounts = Account.get_all()
     accounts_balances = [{
         'name': a.name,
-        'balances': []
+        'balances': [],
+        'days_in_month': days_in_month,
     } for a in accounts]
     transactions_for_month = Transaction.get_all(month, year)
     for day in range(1, days_in_month + 1):
         for i, account in enumerate(accounts_balances):
+            if day > now.day and month == now.month and year == now.year:
+                continue
             balance = accounts[i].balance
             if len(transactions_for_month) == 0 or transactions_for_month[-1].date is None:
                 continue

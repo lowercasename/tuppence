@@ -40,6 +40,8 @@ var categoriesData = {{ categories_chart | safe }}
 var lastYearCategoriesData = {{ last_year_categories_chart | safe }}
 var lastMonthCategoriesData = {{ last_month_categories_chart | safe }}
 var balanceData = {{ balance_chart | safe }}
+var monthName = "{{ current_month }}";
+var ordinalOf = n => n + (n % 10 == 1 && n % 100 != 11 ? 'st' : n % 10 == 2 && n % 100 != 12 ? 'nd' : n % 10 == 3 && n % 100 != 13 ? 'rd' : 'th');
 </script>
 
 <script defer src="{{ url_for('static', filename='js/overview.js') }}"></script>
