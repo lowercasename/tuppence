@@ -11,7 +11,7 @@ def balance_history(month: int, year: int):
         month = now.month
         year = now.year
     days_in_month = monthrange(year, month)[1]
-    accounts = Account.get_all()
+    accounts = Account.get_all(show_archived=False)
     accounts_balances = [{
         'name': a.name,
         'balances': [],

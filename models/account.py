@@ -44,9 +44,9 @@ class Account:
         return repository.get_by_id(id)
 
     @classmethod
-    def get_all(self):
+    def get_all(self, show_archived=True):
         repository = SQLiteAccountRepository(Database("tuppence.db"))
-        return repository.get_all()
+        return repository.get_all(show_archived)
 
     def __str__(self):
         return json.dumps(self.__dict__, ensure_ascii=False, default=str, indent=4)
@@ -69,10 +69,11 @@ class SQLiteAccountRepository:
             return None
         return Account(**a)
 
-    def get_all(self):
+    def get_all(self, show_archived=True):
         fields = ', '.join(self.fields)
         user_id = session['user_id']
-        a = self.db.fetch_all(f"SELECT {fields} FROM accounts WHERE user_id=? ORDER BY sort_order ASC, name DESC", (user_id,))
+        archived_query = "" if show_archived is True else "AND archived = 0"
+        a = self.db.fetch_all(f"SELECT {fields} FROM accounts WHERE user_id=? {archived_query} ORDER BY sort_order ASC, name DESC", (user_id,))
         return [Account(**a) for a in a]
 
     def delete(self, id):
