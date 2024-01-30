@@ -3,6 +3,31 @@
 var balanceCtx = document.getElementById('balanceChart');
 var categoriesCtx = document.getElementById('categoriesChart');
 
+// Normalize the category data for this month, last month, and last year
+// The categories for last month and last year are not guaranteed to be the same
+// as this month so we need to filter out the ones that don't exist in this month
+// and sort them in the same order as this month
+var categoriesData = categoriesData.map(a => ({
+    name: a.name,
+    amount: Math.abs(a.amount / 100),
+}));
+var lastMonthCategoriesData = lastMonthCategoriesData
+    .filter(a => categoriesData.find(b => b.name === a.name))
+    .map(a => ({
+        name: a.name,
+        amount: Math.abs(a.amount / 100),
+    }));
+var lastYearCategoriesData = lastYearCategoriesData
+    .filter(a => categoriesData.find(b => b.name === a.name))
+    .map(a => ({
+        name: a.name,
+        amount: Math.abs(a.amount / 100),
+    }));
+categoriesData.sort((a, b) => a.name.localeCompare(b.name));
+lastMonthCategoriesData.sort((a, b) => a.name.localeCompare(b.name));
+lastYearCategoriesData.sort((a, b) => a.name.localeCompare(b.name));
+
+
 new Chart(balanceCtx, {
     type: 'line',
     data: {
@@ -51,15 +76,15 @@ new Chart(categoriesCtx, {
         datasets: [
             {
                 label: 'This Month',
-                data: categoriesData.map(a => Math.abs(a.amount / 100)),
+                data: categoriesData.map(a => a.amount),
             },
             {
                 label: 'Last Month',
-                data: lastMonthCategoriesData.map(a => Math.abs(a.amount / 100)),
+                data: lastMonthCategoriesData.map(a => a.amount),
             },
             {
                 label: 'Last Year',
-                data: lastYearCategoriesData.map(a => Math.abs(a.amount / 100)),
+                data: lastYearCategoriesData.map(a => a.amount),
             },
         ]
     },
