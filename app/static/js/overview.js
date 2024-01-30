@@ -27,6 +27,9 @@ categoriesData.sort((a, b) => a.name.localeCompare(b.name));
 lastMonthCategoriesData.sort((a, b) => a.name.localeCompare(b.name));
 lastYearCategoriesData.sort((a, b) => a.name.localeCompare(b.name));
 
+console.log(categoriesData);
+console.log(lastMonthCategoriesData)
+
 
 new Chart(balanceCtx, {
     type: 'line',
