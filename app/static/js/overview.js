@@ -7,17 +7,17 @@ var categoriesCtx = document.getElementById('categoriesChart');
 // The categories for last month and last year are not guaranteed to be the same
 // as this month so we need to filter out the ones that don't exist in this month
 // and sort them in the same order as this month
-var categoriesData = categoriesData.map(a => ({
+categoriesData = categoriesData.map(a => ({
     name: a.name,
     amount: Math.abs(a.amount / 100),
 }));
-var lastMonthCategoriesData = lastMonthCategoriesData
+lastMonthCategoriesData = lastMonthCategoriesData
     .filter(a => categoriesData.find(b => b.name === a.name))
     .map(a => ({
         name: a.name,
         amount: Math.abs(a.amount / 100),
     }));
-var lastYearCategoriesData = lastYearCategoriesData
+lastYearCategoriesData = lastYearCategoriesData
     .filter(a => categoriesData.find(b => b.name === a.name))
     .map(a => ({
         name: a.name,
