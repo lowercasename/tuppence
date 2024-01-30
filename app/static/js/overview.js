@@ -5,24 +5,30 @@ var categoriesCtx = document.getElementById('categoriesChart');
 
 // Normalize the category data for this month, last month, and last year
 // The categories for last month and last year are not guaranteed to be the same
-// as this month so we need to filter out the ones that don't exist in this month
+// as this month so we need to filter out the ones that don't exist in this month,
+// add the ones that do exist in this month but not in last month/last year as 0,
 // and sort them in the same order as this month
 categoriesData = categoriesData.map(a => ({
     name: a.name,
     amount: Math.abs(a.amount / 100),
 }));
-lastMonthCategoriesData = lastMonthCategoriesData
-    .filter(a => categoriesData.find(b => b.name === a.name))
-    .map(a => ({
-        name: a.name,
-        amount: Math.abs(a.amount / 100),
-    }));
-lastYearCategoriesData = lastYearCategoriesData
-    .filter(a => categoriesData.find(b => b.name === a.name))
-    .map(a => ({
-        name: a.name,
-        amount: Math.abs(a.amount / 100),
-    }));
+lastMonthCategoriesData = lastMonthCategoriesData.map(a => ({
+    name: a.name,
+    amount: Math.abs(a.amount / 100),
+}));
+lastYearCategoriesData = lastYearCategoriesData.map(a => ({
+    name: a.name,
+    amount: Math.abs(a.amount / 100),
+}));
+
+lastMonthCategoriesData = categoriesData.map(a => ({
+    name: a.name,
+    amount: lastMonthCategoriesData.find(b => b.name === a.name)?.amount ?? 0,
+}));
+lastYearCategoriesData = categoriesData.map(a => ({
+    name: a.name,
+    amount: lastYearCategoriesData.find(b => b.name === a.name)?.amount ?? 0,
+}));
 categoriesData.sort((a, b) => a.name.localeCompare(b.name));
 lastMonthCategoriesData.sort((a, b) => a.name.localeCompare(b.name));
 lastYearCategoriesData.sort((a, b) => a.name.localeCompare(b.name));
