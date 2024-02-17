@@ -46,7 +46,7 @@ def transaction_create():
         amount = currency_string_to_database(amount)
     except ValueError:
         return 'Invalid amount', 400
-    is_transfer = False if request.form.get('is_transfer') is '0' else True
+    is_transfer = False if request.form.get('is_transfer') == '0' else True
     # If this is a transfer, we need to swap the sign of the amount
     if is_transfer:
         amount = -amount
