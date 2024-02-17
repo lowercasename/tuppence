@@ -26,12 +26,13 @@
         <th>Categories</th>
         <th></th>
     </tr>
+    {% include 'transaction_creator.html' %}
     </thead>
     <tbody
+        id="transactions"
         hx-target="closest tr"
         hx-swap="outerHTML"
     >
-    {% include 'transaction_creator.html' %}
     {% for transaction in transactions %}
         {% include 'transaction_single.html' %} 
     {% endfor %}

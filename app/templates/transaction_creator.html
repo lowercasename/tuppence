@@ -1,9 +1,4 @@
-<tr x-data="{
-    isTransfer: false,
-    sign: '-',
-    amount: '',
-    calculatedAmount: 0,
-}">
+<tr x-data="transactionCreator()" id="transaction-creator">
     <td>
         <input type="date" name="date" id="date" value="{{ current_date }}">
     </td>
@@ -51,6 +46,7 @@
                 autofocus
                 x-model="amount"
                 x-on:input="calculateAmount"
+                placeholder="0.00"
             >
             <span
                 class="calculated-input__calculated"
@@ -60,9 +56,9 @@
             <input type="hidden" id="amount" name="amount" x-bind:value="calculatedAmount * (sign === '+' ? 1 : -1)">
         </div>
     </td>
-    <td><input type="text" name="description" id="description"></td>
+    <td><input type="text" name="description" id="description" x-model="description" placeholder="Description"></td>
     <td>
-        <div x-data="{ categories: [], newCategory: '' }" class="category-selector">
+        <div class="category-selector">
             <input
                 type="text"
                 x-model="newCategory"
@@ -77,6 +73,7 @@
                 hx-get="/category/search"
                 hx-trigger="keyup changed delay:350ms"
                 hx-target="next .category-selector__suggestions"
+                hx-swap="outerHTML"
                 placeholder="Add a category"
             >
             <ul class="category-selector__suggestions" style="display: none;"></ul>
@@ -93,7 +90,33 @@
     </td>
     <td><button
         hx-post="/transactions"
-        hx-target="body"
+        hx-select="#transactions"
+        hx-target="#transactions"
+        hx-swap="outerHTML"
         hx-include="#date, #account_id, #pot_id, #amount, #description, #is_transfer, #transfer_source_id, #transfer_destination_id, input[name='category_names']"
+        x-on:click="setTimeout(() => reset(), 100)"
     >Add</button></td>
 </tr>
+
+<script>
+function transactionCreator() {
+    return {
+        isTransfer: false,
+        sign: '-',
+        amount: '',
+        calculatedAmount: 0,
+        description: '',
+        categories: [],
+        newCategory: '',
+        reset() {
+            this.isTransfer = false;
+            this.sign = '-';
+            this.amount = '';
+            this.calculatedAmount = 0;
+            this.description = '';
+            this.categories = [];
+            this.newCategory = '';
+        },
+    };
+}
+</script>

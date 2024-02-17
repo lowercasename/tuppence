@@ -161,11 +161,20 @@ table.data-table {
     font-size: 0.9rem;
 }
 
+table.data-table thead {
+    border-bottom: 1px solid var(--grey-400);
+}
+
 table.data-table thead th {
     text-align: left;
     padding: 0.5rem;
     border-bottom: 1px solid var(--grey-400);
 }
+
+table.data-table thead tr:first-child {
+padding-bottom: 0.5rem;
+}
+
 
 table.data-table tbody td {
     padding: 0.5rem;
@@ -187,6 +196,10 @@ table.data-table input[type="number"],
 table.data-table select,
 table.data-table textarea {
     width: 100%;
+}
+
+#transaction-creator td {
+    padding: 0.5rem;
 }
 
 .grid {
@@ -232,7 +245,7 @@ table.data-table textarea {
     font-weight: 700;
     font-style: normal;
     position: absolute;
-    top: 1rem;
+    top: 0.9rem;
     right: 0.5rem;
     transform: translateY(-50%);
     color: inherit;
@@ -275,7 +288,7 @@ table.data-table textarea {
     margin: 0;
     padding: 0;
     list-style: none;
-    width: calc(100% - 2px);
+    width: 100%;
     background: #fefefe;
     left: 0;
     border-top: 1px solid var(--grey-300);
@@ -284,7 +297,7 @@ table.data-table textarea {
     border-right: 1px solid var(--blue-500);
     border-radius: 0 0 0.25rem 0.25rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    top: calc(1rem + 7px);
+    top: calc(1rem + 10px);
     font-size: 0.9rem;
     color: var(--grey-700);
 }
